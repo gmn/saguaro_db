@@ -1,0 +1,118 @@
+<html>
+
+<head>
+
+<style>
+#control_panel {
+border: 1px solid #888;
+padding: 4px;
+}
+</style>
+
+<title>Interactive Saguaro Astronomy Club Database</title>
+
+<script src="../queryable/queryable.js"></script>
+<script src="SAC_database.js"></script>
+<script src="pager.js"></script>
+
+
+</head>
+
+<body>
+
+<h2>Saguaro Astronomy Club Interactive database</h2>
+<div id="control_panel">
+<strong>Set dropdowns to refine query</strong><br>
+<input type="text" /><br>
+<button>One</button><br>
+<button>One</button><br>
+<button>One</button><br>
+
+Object Type: 
+<select id="object_type" name="object_type">
+<option value="all"> - </option>
+<option value="GALXY">Galaxy</option>
+<option value="2STAR">binary</option>
+<option value="1STAR">star</option>
+<option value="G+C+N"></option>
+<option value="OPNCL">open cluster</option>
+<option value="PLNNB">nebula</option>
+<option value="GALCL"></option>
+<option value="3STAR">trinary</option>
+<option value="GLOCL">globular cluster</option>
+<option value="ASTER">asterism</option>
+<option value="DRKNB"></option>
+<option value="BRTNB"></option>
+<option value="8STAR"></option>
+<option value="NONEX"></option>
+<option value="SNREM"></option>
+<option value="CL+NB"></option>
+<option value="QUASR">quasar</option>
+<option value="4STAR"></option>
+<option value="GX+DN"></option>
+<option value="LMCOC"></option>
+<option value="LMCGC"></option>
+<option value="LMCDN"></option>
+<option value="LMCCN"></option>
+<option value="GX+GC"></option>
+<option value="SMCCN"></option>
+<option value="SMCGC"></option>
+<option value="SMCOC"></option>
+<option value="SMCDN"></option>
+</select>
+</div>
+
+&nbsp;<br />&nbsp;
+
+<div id="table_container"></div>
+
+<script>
+var db = queryable.open( {data:SAC_db} );
+
+function obj_keys( obj ) {
+  var a= [];
+  for ( var k in obj ) {
+    if ( obj.hasOwnProperty(k) ) {
+      a.push(k);
+    }
+  }
+  return a;
+}
+function obj_vals( obj ) {
+  var a= [];
+  for ( var k in obj ) {
+    if ( obj.hasOwnProperty(k) ) {
+      a.push(obj[k]);
+    }
+  }
+  return a;
+}
+
+var e = document.getElementById('object_type');
+e.onchanged = function() {
+//  var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
+};
+
+var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
+
+var bord = '1px solid #888';
+var ibord = '1px solid #CCC';
+
+var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
+table.headers = obj_keys( res.rows[0] );
+table.headers.shift(); // remove '_id'
+for ( var i = 0; i < res.length; i++ ) 
+{
+  var vals = obj_vals( res.rows[i] );
+  vals.shift(); // remove '_id'
+  table.add_row( vals );
+}
+
+var e = document.getElementById("table_container");
+e.innerHTML = table.html();
+table.setParent( e );
+</script>
+
+
+</body>
+</html>
