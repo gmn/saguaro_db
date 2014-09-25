@@ -64,6 +64,7 @@ Object Type:
 
 &nbsp;<br />&nbsp;
 
+<div id="report">&nbsp;</div>
 <div id="table_container"></div>
 
 <script>
@@ -88,9 +89,32 @@ function obj_vals( obj ) {
   return a;
 }
 
-var e = document.getElementById('object_type');
-e.onchanged = function() {
-//  var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
+
+document.getElementById('object_type').onchange = function() 
+{
+  var table_cont = document.getElementById("table_container");
+  table_cont.innerHTML = '<div>computing...<br><img height="100px" width="100px" src="ajax_loader_gray_512.gif" alt="" /></div>';
+
+  setTimeout( function() {
+    var e = document.getElementById('object_type');
+    var val = e.options[e.selectedIndex].value;
+    var res = db.find( { type: val} );
+
+    var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
+    table.setParent( table_cont );
+    table.headers = obj_keys( res.rows[0] );
+    table.headers.shift(); // remove '_id' field
+    for ( var i = 0; i < res.length; i++ ) 
+    {
+      var vals = obj_vals( res.rows[i] );
+      vals.shift(); // remove '_id' fields
+      table.add_row( vals );
+    }
+
+    table_cont.innerHTML = table.html();
+
+    document.getElementById("report").innerHTML = 'returned <strong>' + res.length + '</strong> results';
+  }, 500 );
 };
 
 var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
@@ -99,6 +123,7 @@ var bord = '1px solid #888';
 var ibord = '1px solid #CCC';
 
 var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
+table.setParent( e );
 table.headers = obj_keys( res.rows[0] );
 table.headers.shift(); // remove '_id'
 for ( var i = 0; i < res.length; i++ ) 
@@ -110,7 +135,6 @@ for ( var i = 0; i < res.length; i++ )
 
 var e = document.getElementById("table_container");
 e.innerHTML = table.html();
-table.setParent( e );
 </script>
 
 

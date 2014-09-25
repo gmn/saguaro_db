@@ -1,13 +1,34 @@
 
 "use strict";
 
-var filename = 'SAC\ Deep\ Sky\ Database\ 8.1.json';
+var db_name = "Saguaro_Deep_Sky_queryable_db.json";
+var csv_filename = 'SAC Deep Sky Database 8.1.csv';
 var fs = require('fs');
-var JSON = fs.readFileSync( filename, {encoding:'utf8',flag:'r'} );
+var print = function(s) { console.log( s + "\n" ); };
+var print_json = function(s) { console.log( JSON.stringify(s) ); };
+var queryable = require( '../../queryable/queryable.js' );
 
-var queryable = require( '../queryable/queryable.js' );
-var db = queryable.open( {db_name:"Saguaro_Deep_Sky_queryable_db.json",data:JSON,db_dir:'./'} );
 
+function csv_to_json()
+{
+  var csv = fs.readFileSync( csv_filename, {encoding:'utf8',flag:'r'} );
+  var str_ary = csv.split( "\n" );
+  var obj_ary = [];
+  var headers = str_ary[0].split(',');
+  for ( var i = 1, l = str_ary.length; i < l; i++ ) {
+    var o = {};
+    var a = str_ary[i].split(',');
+    for ( var j = 0; j < a.length; j++ ) {
+      o[ headers[j] ] = a[j];
+    }
+    obj_ary.push( o );
+  }
+  return obj_ary;
+}
+
+var JSON = csv_to_json();
+
+var db = queryable.open( {db_name:db_name,data:JSON,db_dir:'./'} );
 
 
 /*
@@ -37,14 +58,14 @@ for ( var i = 0, l = m.length; i < l; i++ )
 
   var sm = 'size_max'; 
   if ( o[sm] && o[sm].trim().length > 0 ) {
-    o[sm+'_arcmin'] = parseFloat( o[sm].replace('m','') );
+    o[sm] = parseFloat( o[sm].replace('m','') );
   }
-  delete o[sm];
+  //delete o[sm];
   sm = 'size_min';
   if ( o[sm] && o[sm].trim().length > 0 ) {
-    o[sm+'_arcmin'] = parseFloat( o[sm].replace('m','') );
+    o[sm] = parseFloat( o[sm].replace('m','') );
   }
-  delete o[sm];
+  //delete o[sm];
     
   for ( var j = 0; j < fix.length; j++ ) 
   {
