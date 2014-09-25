@@ -23,42 +23,52 @@ padding: 4px;
 <h2>Saguaro Astronomy Club Interactive database</h2>
 <div id="control_panel">
 <strong>Set dropdowns to refine query</strong><br>
-<input type="text" /><br>
-<button>One</button><br>
-<button>One</button><br>
-<button>One</button><br>
+Minimum Magnitude: 
+<select id="min_mag" name="min_mag">
+<option value="any"> - </option>
+</select><br>
+Maximum Magnitude: 
+<select id="max_mag" name="max_mag">
+<option value="any"> - </option>
+</select><br>
 
 Object Type: 
 <select id="object_type" name="object_type">
 <option value="all"> - </option>
+<option value="ASTER">Asterism</option>
+<option value="BRTNB">Bright Nebula</option>
+<option value="CL+NB">Cluster with Nebulosity</option>
+<option value="DRKNB">Dark Nebula</option>
+<option value="GALCL">Galaxy Cluster</option>
 <option value="GALXY">Galaxy</option>
-<option value="2STAR">binary</option>
-<option value="1STAR">star</option>
-<option value="G+C+N"></option>
-<option value="OPNCL">open cluster</option>
-<option value="PLNNB">nebula</option>
-<option value="GALCL"></option>
-<option value="3STAR">trinary</option>
-<option value="GLOCL">globular cluster</option>
-<option value="ASTER">asterism</option>
-<option value="DRKNB"></option>
-<option value="BRTNB"></option>
-<option value="8STAR"></option>
-<option value="NONEX"></option>
-<option value="SNREM"></option>
-<option value="CL+NB"></option>
-<option value="QUASR">quasar</option>
-<option value="4STAR"></option>
-<option value="GX+DN"></option>
-<option value="LMCOC"></option>
-<option value="LMCGC"></option>
-<option value="LMCDN"></option>
-<option value="LMCCN"></option>
-<option value="GX+GC"></option>
-<option value="SMCCN"></option>
-<option value="SMCGC"></option>
-<option value="SMCOC"></option>
-<option value="SMCDN"></option>
+
+<option value="GLOCL">Globular Cluster</option>
+<option value="OPNCL">Open Cluster</option>
+<option value="PLNNB">Planetary Nebula</option>
+<option value="SNREM">Supernova Remnant</option>
+<option value="QUASR">Quasar</option>
+
+<option value="1STAR">Star</option>
+<option value="2STAR">Binary Star</option>
+<option value="3STAR">3STAR</option>
+<option value="4STAR">4STAR</option>
+<option value="8STAR">8STAR</option>
+
+<option value="NONEX">Nonexistant</option>
+
+<option value="G+C+N">Cluster with Nebulosity in a Galaxy</option>
+<option value="GX+DN">Diffuse Nebula in a Galaxy</option>
+<option value="GX+GC">Globular Cluster in a Galaxy</option>
+
+<option value="LMCCN">Cluster with Nebulosity in the LMC</option>
+<option value="LMCOC">Open cluster in the LMC</option>
+<option value="LMCGC">Globular Cluster in the LMC</option>
+<option value="LMCDN">Diffuse Nebula in the LMC</option>
+
+<option value="SMCCN"> Cluster with Nebulosity in the SMC </option>
+<option value="SMCGC"> Globular Cluster in the SMC </option>
+<option value="SMCOC"> Open cluster in the SMC </option>
+<option value="SMCDN"> Diffuse Nebula in the SMC </option>
 </select>
 </div>
 
@@ -68,8 +78,14 @@ Object Type:
 <div id="table_container"></div>
 
 <script>
+/*
+ * INITS
+ */
 var db = queryable.open( {data:SAC_db} );
 
+/*
+ * FUNCS
+ */
 function obj_keys( obj ) {
   var a= [];
   for ( var k in obj ) {
@@ -88,7 +104,6 @@ function obj_vals( obj ) {
   }
   return a;
 }
-
 
 document.getElementById('object_type').onchange = function() 
 {
@@ -117,6 +132,21 @@ document.getElementById('object_type').onchange = function()
   }, 500 );
 };
 
+/*
+ * CREATE DROPDOWNS
+ */
+var min_mag = document.getElementById( 'min_mag' );
+var max_mag = document.getElementById( 'max_mag' );
+for (var i = 1; i <= 20; i++) {
+    var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
+    min_mag.options.add( opt ) ;
+    var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
+    max_mag.options.add( opt );
+}
+
+/* 
+ * DO STUFF
+ */
 var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
 
 var bord = '1px solid #888';

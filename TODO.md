@@ -33,3 +33,5 @@ TODO:
     (Object can't have have duplicate key in strict mode)
     * find queryable bug in computing multiple AND statements
       find( { 'mag': {$lte: 18}, 'mag': {$gt: 17} } );
+
+  - save in localData, check localData on page-load, if not exist, Ajax-get 3-megabyte Database file
