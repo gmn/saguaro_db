@@ -19,7 +19,6 @@ TODO:
   - google ads
   - advertise on STARGAZERSLOUNGE and CLOUDYNIGHTS
 
-
   - explanations of every field in the table
   - mouse-over TITLE explanations of fields (in table header)
 
@@ -35,3 +34,5 @@ TODO:
       find( { 'mag': {$lte: 18}, 'mag': {$gt: 17} } );
 
   - save in localData, check localData on page-load, if not exist, Ajax-get 3-megabyte Database file
+
+  - message area that prints out most recent query parameters
