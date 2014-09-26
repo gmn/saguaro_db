@@ -1,5 +1,9 @@
 
 TODO:
+  - About link: popup, toggled
+  - test in IE
+  - clarify copyrights, Saguaro Astro for their DB version 8.1, and Gregory Naughton for this Interactive version.
+
   - save in localData, check localData on page-load, if not exist, Ajax-get 3-megabyte Database file
 
   - set up to work with other Saguaro DB files, and DB files from other places
