@@ -1,5 +1,7 @@
 
 TODO:
+  X pre-load screen that says: "Please be patient. This project is approx 3.5 megabytes and will take a second to load. Once it has downloaded however, everything in the app takes places entirely in your browser's memory."
+
   - About link: popup, toggled
   - test in IE
   - clarify copyrights, Saguaro Astro for their DB version 8.1, and Gregory Naughton for this Interactive version.
