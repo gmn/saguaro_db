@@ -15,10 +15,27 @@
   <script src="queryable.js"></script>
   <script src="SAC_database.js"></script>
   <script src="pager.js"></script>
+
+  <script>
+  var bgcolor = null;
+  var bgred = "#800";
+  var cycle = [{c:"#FFF",d:"white"},{c:"#B00",d:"lightest"},{c:"#800000",d:"normal"},{c:"#600000",d:"darker"},{c:"#400",d:"darkest"}];
+  function toggle_color() {
+    bgcolor = cycle.shift();
+    cycle.push(bgcolor);
+    document.body.setAttribute( "style", "background-color:"+bgcolor.c );
+    document.getElementById("which_color").innerHTML = bgcolor.d;
+  }
+  </script>
+
 </head>
 
 
 <body>
+  <p style="margin:0;padding:0"><a href="javascript:toggle_color();">night mode</a> &nbsp;<span id="which_color"></span></p>
+  <script>
+  toggle_color();
+  </script>
   <h2 id="heading"></h2>
   <p id="info" style="margin:0;padding:0">For more information see: <a href="http://www.saguaroastro.org/" target="_blank">saguaroastro.org</a></p>
   <div id="control_panel">
