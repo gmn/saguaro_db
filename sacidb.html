@@ -347,11 +347,11 @@ var min_dec_deg = document.getElementById( "min_dec_deg" );
 var max_dec_deg = document.getElementById( "max_dec_deg" );
 var min_ras = document.getElementById("min_ras");
 var max_ras = document.getElementById("max_ras");
-for (var i = 1; i <= 20; i++) {
-    var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
+for (var i = 1; i <= 20; i+=0.5) {
+    var opt = new Option ( "" + i, "" + i);
     min_mag.options.add( opt ) ;
-    var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
-    if ( i === 11 )
+    var opt = new Option ( "" + i, "" + i);
+    if ( i === 11.5 )
       opt.selected = true;
     max_mag.options.add( opt );
 }
