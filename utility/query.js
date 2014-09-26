@@ -35,5 +35,11 @@ res = db.distinct( 'type' );
 res.rows.forEach( function(row){
   process.stdout.write( row.type + ', ' );
 });
-
 console.log( ' ' );
+
+res = db.distinct( 'con' );
+res.rows.forEach( function(row){
+  process.stdout.write( row.con + ', ' );
+});
+console.log( ' ' );
+
