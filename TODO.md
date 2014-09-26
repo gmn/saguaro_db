@@ -3,6 +3,12 @@ TODO:
   X pre-load screen that says: "Please be patient. This project is approx 3.5 megabytes and will take a second to load. Once it has downloaded however, everything in the app takes places entirely in your browser's memory."
 
   - About link: popup, toggled
+    "This is a very simple project that puts the query tools right in the browser, enabling the user to constrain the database however they may see fit. It is intended as a viewing aid, something that you can take outside and use along side a telescope and star chart. Uranometria page numbers are provided for all objects. 
+
+I wrote this in nearly pure javascript, using a minimum of external dependencies -- What you see is what you get. It is based entirely on the Saguaro Astronomy Club's Deep Sky Objects database that is the cumulation of a dozen year's effort. This database is provided free of charge by the Saguaro Astronomy club: <a href="http://saguaroastro.org">saguaroastro.org</a>.
+
+Any questions, comments, suggestions for improvement can be sent uninhibitedly to <a href="mailto:greg@naughton.org">greg@naughton.org</a>. I appreciate your looking at it and sincerely hope you enjoy using it."
+
   - test in IE
   - clarify copyrights, Saguaro Astro for their DB version 8.1, and Gregory Naughton for this Interactive version.
 

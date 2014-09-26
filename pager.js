@@ -129,7 +129,11 @@ var ctable = (function(ctable){
                 // is there a fundamental difference/reason why to use href="function()" over onclick="function()" ?
 
                 //s += "    <th"+th+" onclick=\"sortCTable("+this.index+","+i+")\"><a href=\"javascript:void(0)\">"+this.headers[i]+"</a></th>\n";
-                s += "    <th"+th+"><a href=\"javascript:sortCTable("+this.index+","+i+")\">"+this.headers[i]+"</a></th>\n";
+                // header can be either array of strings, or array of objects of fmt: {title:url_title,name:string}
+                if ( typeof this.headers[i] === "object" )
+                    s += "    <th"+th+"><a href=\"javascript:sortCTable("+this.index+","+i+")\" title=\""+this.headers[i].title+"\">"+this.headers[i].name+"</a></th>\n";
+                else
+                    s += "    <th"+th+"><a href=\"javascript:sortCTable("+this.index+","+i+")\">"+this.headers[i]+"</a></th>\n";
             }
             if ( this.headers.length > 0 ) 
                 s += "  </tr>\n";

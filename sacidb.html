@@ -304,8 +304,37 @@ function new_query()
   var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
   var table_cont = document.getElementById("table_container");
   table.setParent( table_cont );
+
   table.headers = obj_keys( res.rows[0] );
   table.headers.shift(); // remove '_id' field
+
+  var hset = [ 
+    { name: "object", title:"Proper title of the object (usually NGC catalog)"} ,
+    { name: "other", title: "secondary name. Sometimes UGC, Messier, IC, others.." },
+    { name: "type", title: "Type of object it is. ie. Galaxy, Nebula, Cluster, ..." }, 
+    { name: "con", title: "Constellation appears in" },
+    { name: "ra_hr", title: "Right Ascension Hour" },
+    { name: "ra_min", title: "Right Ascension Minute" },
+    { name: "dec_deg", title: "Declination, Degrees" },
+    { name: "dec_min", title: "Declination, Minutes" },
+    { name: "mag", title: "Magnitude" },
+    { name: "subr", title: "??" },
+    { name: "urano", title: "Uranometria 2000.0 page number" },
+    { name: "ti", title: "Tirion SkyAtlas 2000.0 page number" },
+    { name: "size_max", title: "Maximum Size in arcminutes" },
+    { name: "size_min", title: "Minimum Size in arcminutes" },
+    { name: "pa", title: "??" },
+    { name: "class", title: "stellar class" },
+    { name: "nsts", title: "??" },
+    { name: "brstr", title: "??" },
+    { name: "bchm", title: "??" },
+    { name: "ngc descr", title: "??" },
+    { name: "notes", "title": "Notes, presumably from Saguaro Astro club members or Steve Coe" }
+  ];
+
+  // use headers with mouse-over titles, instead
+  table.headers = hset;
+
   for ( var i = 0; i < res.length; i++ ) {
     var vals = obj_vals( res.rows[i] );
     vals.shift(); // remove '_id' fields
