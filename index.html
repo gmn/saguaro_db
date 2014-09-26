@@ -9,9 +9,9 @@ padding: 4px;
 }
 </style>
 
-<title>Interactive Saguaro Astronomy Club Database</title>
+<title id="title"></title>
 
-<script src="../queryable/queryable.js"></script>
+<script src="queryable.js"></script>
 <script src="SAC_database.js"></script>
 <script src="pager.js"></script>
 
@@ -20,7 +20,7 @@ padding: 4px;
 
 <body>
 
-<h2>Saguaro Astronomy Club Interactive database</h2>
+<h2 id="heading"></h2>
 <div id="control_panel">
 
 <table> <tr><td>
@@ -35,7 +35,7 @@ Object Type:
 <option value="CL+NB">Cluster with Nebulosity</option>
 <option value="DRKNB">Dark Nebula</option>
 <option value="GALCL">Galaxy Cluster</option>
-<option value="GALXY">Galaxy</option>
+<option value="GALXY" selected>Galaxy</option>
 
 <option value="GLOCL">Globular Cluster</option>
 <option value="OPNCL">Open Cluster</option>
@@ -102,6 +102,8 @@ Constellation:
 <select id="constellation" name="constellation">
 <option value="-1"> - </option>
 </select><br>
+Search: 
+<input type="text" id="search" name="search" />
 
 </td></tr></table>
 
@@ -113,10 +115,15 @@ Constellation:
 <div id="table_container"></div>
 
 <script>
+
 /*
  * INITS
  */
 var db = queryable.open( {data:SAC_db} );
+var bord = '1px solid #888';
+var ibord = '1px solid #CCC';
+var proj_title = "Saguaro Astronomy Club Interactive Database";
+var typing_timeout = 1666;
 
 /*
  * FUNCS
@@ -187,6 +194,15 @@ function new_query()
   var constellation = e.options[e.selectedIndex].value;
   if ( constellation !== "-1" )
     parms['con'] = constellation;
+
+  e = document.getElementById("search");
+  var stext = e.value;
+  if ( stext && stext.trim().length > 0 ) { 
+    var reg = new RegExp( stext.trim() , "ig" );
+    parms['$or'] = [ {"object":reg},{"other":reg},{"notes":reg} ];
+  }
+    
+
   
   //
   // look shit up
@@ -194,13 +210,16 @@ function new_query()
   var res = db.find( parms );
 
 
+  //
+  // build table out of it
+  //
+
   var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
   var table_cont = document.getElementById("table_container");
   table.setParent( table_cont );
   table.headers = obj_keys( res.rows[0] );
   table.headers.shift(); // remove '_id' field
-  for ( var i = 0; i < res.length; i++ ) 
-  {
+  for ( var i = 0; i < res.length; i++ ) {
     var vals = obj_vals( res.rows[i] );
     vals.shift(); // remove '_id' fields
     table.add_row( vals );
@@ -210,14 +229,26 @@ function new_query()
   document.getElementById("report").innerHTML = 'returned <strong>' + res.length + '</strong> results';
 }
 
+var onchange_running = null;
 function onchange_function() 
 {
   var table_cont = document.getElementById("table_container");
-  table_cont.innerHTML = '<div>computing...<br><img height="100px" width="100px" src="ajax_loader_gray_512.gif" alt="" /></div>';
-  setTimeout( function(){ new_query(); }, 500 );
+  table_cont.innerHTML = '<center><div style="margin:0 auto;"><img height="100px" width="100px" src="ajax_loader_gray_512.gif" alt="" /></div></center>';
+  document.getElementById("report").innerHTML = 'computing...';
+  if ( onchange_running ) {
+    clearTimeout( onchange_running );
+    onchange_running = null;
+  }
+  onchange_running = setTimeout( function(){ new_query(); }, 500 );
 };
 
 document.getElementById('object_type').onchange = onchange_function;
+
+
+document.getElementById("title").innerHTML = 
+  document.getElementById("heading").innerHTML =
+  proj_title;
+
 
 /*
  * SETUP DROPDOWNS
@@ -232,11 +263,15 @@ for (var i = 1; i <= 20; i++) {
     var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
     min_mag.options.add( opt ) ;
     var opt = new Option ( (i < 10 ? "0": "") + i, "" + i);
+    if ( i === 11 )
+      opt.selected = true;
     max_mag.options.add( opt );
 }
 for (var j = -18; j <= 18; j++ ) {
     i = j * 5; 
     var opt = new Option ( "" + i, "" + i);
+    if ( i === 0 )
+      opt.selected = true;
     min_dec_deg.options.add( opt );
     var opt = new Option ( "" + i, "" + i);
     max_dec_deg.options.add( opt );
@@ -263,28 +298,23 @@ for ( var key in cons ) {
 }
 constellation.onchange = onchange_function;
 
+var search = document.getElementById("search");
+var timer = null;
+search.onkeydown = function() {
+  if ( timer ) {
+    clearTimeout(timer);
+    timer = null;
+  }
+
+  timer = setTimeout( function(){ onchange_function(); }, typing_timeout );
+};
+
 
 /* 
- * DO STUFF
+ * DEFAULT TABLE - Galaxies 11 magnitude > 0 degrees declination
  */
-var res = db.find( { type:"GALXY","mag":{$lte:11.5},"dec_deg":{$gt:0} } ).sort( {mag:1} );
+new_query();
 
-var bord = '1px solid #888';
-var ibord = '1px solid #CCC';
-
-var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
-table.setParent( e );
-table.headers = obj_keys( res.rows[0] );
-table.headers.shift(); // remove '_id'
-for ( var i = 0; i < res.length; i++ ) 
-{
-  var vals = obj_vals( res.rows[i] );
-  vals.shift(); // remove '_id'
-  table.add_row( vals );
-}
-
-var e = document.getElementById("table_container");
-e.innerHTML = table.html();
 </script>
 
 
