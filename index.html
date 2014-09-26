@@ -107,6 +107,7 @@
   </td></tr></table>
 
   </div>
+  <div id="query_summary"></div>
 
   &nbsp;<br />&nbsp;
 
@@ -122,7 +123,7 @@ var db = queryable.open( {data:SAC_db} );
 var bord = '1px solid #888';
 var ibord = '1px solid #CCC';
 var proj_title = "Saguaro Astronomy Club Interactive Database";
-var typing_timeout = 1666;
+var typing_timeout = 1250;
 
 /*
  * FUNCS
@@ -144,6 +145,70 @@ function obj_vals( obj ) {
     }
   }
   return a;
+}
+
+function ddval( eltname ) {
+  var e = document.getElementById( eltname );
+  return e.options[e.selectedIndex].value;
+}
+
+function build_report() 
+{
+  var s = "Showing <strong>"; 
+  var w = '';
+  var x = '';
+  var y = '';
+
+// ANY type of object
+// Galaxies
+  var e = document.getElementById('object_type');
+  var type = e.options[e.selectedIndex].value;
+  if ( type === "-1" )
+    s += 'ANY type of object';
+  else
+    s += e.options[e.selectedIndex].innerHTML ;
+  s += '</strong>s ';
+
+// that have
+  var min = ddval( "min_mag" );
+  if ( min !== "-1" )
+    w += "min magnitude of <strong>"+min+"</strong> ";
+  var max = ddval("max_mag");
+  if ( max !== "-1" )
+    w += "max magnitude of <strong>"+max+"</strong> ";
+
+  var min_dd = ddval( "min_dec_deg" );
+  if ( min_dd !== "-1" )
+    w += "min declination of <strong>"+min_dd+"</strong> ";
+  var max_dd = ddval( "max_dec_deg" );
+  if ( max_dd !== "-1" )
+    w += "max declination of <strong>"+max_dd+"</strong> ";
+
+  var min_ra = ddval( "min_ras" );
+  if ( min_ra !== "-1" )
+    w += "min right-ascension of <strong>"+min_ra+"</strong> ";
+  var max_ra = ddval( "max_ras" );
+  if ( max_ra !== "-1" )
+    w += "max right-ascension of <strong>"+max_ra+"</strong> ";
+
+// in constellation
+  e = document.getElementById('constellation');
+  var constellation = e.options[e.selectedIndex].value;
+  if ( constellation !== "-1" )
+    x += "in constellation <strong>" + e.options[e.selectedIndex].innerHTML + "</strong> ";
+
+// and match
+  var stext = document.getElementById("search").value;
+  if ( stext && stext.trim().length > 0 ) { 
+    y += "that match <strong>" + stext.trim() + "</strong> ";
+  }
+ 
+ 
+// show report
+  if ( w.length > 0 )
+    s += "that have " + w;
+
+  document.getElementById( "query_summary" ).innerHTML = s + x + y;
 }
 
 function new_query() 
@@ -226,6 +291,7 @@ function new_query()
 
   table_cont.innerHTML = table.html();
   document.getElementById("report").innerHTML = 'returned <strong>' + res.length + '</strong> results';
+  build_report();
 }
 
 var onchange_running = null;
