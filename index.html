@@ -1,118 +1,117 @@
+<!DOCTYPE html>
 <html>
 
+
 <head>
+  <style>
+  #control_panel {
+  border: 1px solid #888;
+  padding: 4px;
+  }
+  </style>
 
-<style>
-#control_panel {
-border: 1px solid #888;
-padding: 4px;
-}
-</style>
+  <title id="title"></title>
 
-<title id="title"></title>
-
-<script src="queryable.js"></script>
-<script src="SAC_database.js"></script>
-<script src="pager.js"></script>
-
-
+  <script src="queryable.js"></script>
+  <script src="SAC_database.js"></script>
+  <script src="pager.js"></script>
 </head>
 
+
 <body>
+  <h2 id="heading"></h2>
+  <div id="control_panel">
 
-<h2 id="heading"></h2>
-<div id="control_panel">
+  <table> <tr><td>
 
-<table> <tr><td>
+  <strong>Set dropdowns to refine query</strong><br>
 
-<strong>Set dropdowns to refine query</strong><br>
+  Object Type: 
+  <select id="object_type" name="object_type">
+  <option value="-1"> - </option>
+  <option value="ASTER">Asterism</option>
+  <option value="BRTNB">Bright Nebula</option>
+  <option value="CL+NB">Cluster with Nebulosity</option>
+  <option value="DRKNB">Dark Nebula</option>
+  <option value="GALCL">Galaxy Cluster</option>
+  <option value="GALXY" selected>Galaxy</option>
 
-Object Type: 
-<select id="object_type" name="object_type">
-<option value="-1"> - </option>
-<option value="ASTER">Asterism</option>
-<option value="BRTNB">Bright Nebula</option>
-<option value="CL+NB">Cluster with Nebulosity</option>
-<option value="DRKNB">Dark Nebula</option>
-<option value="GALCL">Galaxy Cluster</option>
-<option value="GALXY" selected>Galaxy</option>
+  <option value="GLOCL">Globular Cluster</option>
+  <option value="OPNCL">Open Cluster</option>
+  <option value="PLNNB">Planetary Nebula</option>
+  <option value="SNREM">Supernova Remnant</option>
+  <option value="QUASR">Quasar</option>
 
-<option value="GLOCL">Globular Cluster</option>
-<option value="OPNCL">Open Cluster</option>
-<option value="PLNNB">Planetary Nebula</option>
-<option value="SNREM">Supernova Remnant</option>
-<option value="QUASR">Quasar</option>
+  <option value="1STAR">Star</option>
+  <option value="2STAR">Binary Star</option>
+  <option value="3STAR">3STAR</option>
+  <option value="4STAR">4STAR</option>
+  <option value="8STAR">8STAR</option>
 
-<option value="1STAR">Star</option>
-<option value="2STAR">Binary Star</option>
-<option value="3STAR">3STAR</option>
-<option value="4STAR">4STAR</option>
-<option value="8STAR">8STAR</option>
+  <option value="NONEX">Nonexistant</option>
 
-<option value="NONEX">Nonexistant</option>
+  <option value="G+C+N">Cluster with Nebulosity in a Galaxy</option>
+  <option value="GX+DN">Diffuse Nebula in a Galaxy</option>
+  <option value="GX+GC">Globular Cluster in a Galaxy</option>
 
-<option value="G+C+N">Cluster with Nebulosity in a Galaxy</option>
-<option value="GX+DN">Diffuse Nebula in a Galaxy</option>
-<option value="GX+GC">Globular Cluster in a Galaxy</option>
+  <option value="LMCCN">Cluster with Nebulosity in the LMC</option>
+  <option value="LMCOC">Open cluster in the LMC</option>
+  <option value="LMCGC">Globular Cluster in the LMC</option>
+  <option value="LMCDN">Diffuse Nebula in the LMC</option>
 
-<option value="LMCCN">Cluster with Nebulosity in the LMC</option>
-<option value="LMCOC">Open cluster in the LMC</option>
-<option value="LMCGC">Globular Cluster in the LMC</option>
-<option value="LMCDN">Diffuse Nebula in the LMC</option>
+  <option value="SMCCN"> Cluster with Nebulosity in the SMC </option>
+  <option value="SMCGC"> Globular Cluster in the SMC </option>
+  <option value="SMCOC"> Open cluster in the SMC </option>
+  <option value="SMCDN"> Diffuse Nebula in the SMC </option>
+  </select><br>
 
-<option value="SMCCN"> Cluster with Nebulosity in the SMC </option>
-<option value="SMCGC"> Globular Cluster in the SMC </option>
-<option value="SMCOC"> Open cluster in the SMC </option>
-<option value="SMCDN"> Diffuse Nebula in the SMC </option>
-</select><br>
+  Minimum Magnitude: 
+  <select id="min_mag" name="min_mag">
+  <option value="-1"> - </option>
+  </select><br>
+  Maximum Magnitude: 
+  <select id="max_mag" name="max_mag">
+  <option value="-1"> - </option>
+  </select><br>
 
-Minimum Magnitude: 
-<select id="min_mag" name="min_mag">
-<option value="-1"> - </option>
-</select><br>
-Maximum Magnitude: 
-<select id="max_mag" name="max_mag">
-<option value="-1"> - </option>
-</select><br>
+  </td><td>
 
-</td><td>
-
-Min Declination Degrees: 
-<select id="min_dec_deg" name="min_dec_deg">
-<option value="-1"> - </option>
-</select><br>
-Max Declination Degrees: 
-<select id="max_dec_deg" name="max_dec_deg">
-<option value="-1"> - </option>
-</select><br>
+  Min Declination Degrees: 
+  <select id="min_dec_deg" name="min_dec_deg">
+  <option value="-1"> - </option>
+  </select><br>
+  Max Declination Degrees: 
+  <select id="max_dec_deg" name="max_dec_deg">
+  <option value="-1"> - </option>
+  </select><br>
 
 
-Min Right Ascension: 
-<select id="min_ras" name="min_ras">
-<option value="-1"> - </option>
-</select><br>
-Max Right Ascension: 
-<select id="max_ras" name="max_ras">
-<option value="-1"> - </option>
-</select><br>
+  Min Right Ascension: 
+  <select id="min_ras" name="min_ras">
+  <option value="-1"> - </option>
+  </select><br>
+  Max Right Ascension: 
+  <select id="max_ras" name="max_ras">
+  <option value="-1"> - </option>
+  </select><br>
 
-</td><td>
+  </td><td>
 
-Constellation: 
-<select id="constellation" name="constellation">
-<option value="-1"> - </option>
-</select><br>
-Search: 
-<input type="text" id="search" name="search" />
+  Constellation: 
+  <select id="constellation" name="constellation">
+  <option value="-1"> - </option>
+  </select><br>
+  Search: 
+  <input type="text" id="search" name="search" />
 
-</td></tr></table>
+  </td></tr></table>
 
-</div>
+  </div>
 
-&nbsp;<br />&nbsp;
+  &nbsp;<br />&nbsp;
 
-<div id="report">&nbsp;</div>
-<div id="table_container"></div>
+  <div id="report">&nbsp;</div>
+  <div id="table_container"></div>
 
 <script>
 
