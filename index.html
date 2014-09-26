@@ -20,6 +20,7 @@
 
 <body>
   <h2 id="heading"></h2>
+  <p id="info" style="margin:0;padding:0">For more information see: <a href="http://www.saguaroastro.org/" target="_blank">saguaroastro.org</a></p>
   <div id="control_panel">
 
   <table> <tr><td>
@@ -123,6 +124,7 @@ var db = queryable.open( {data:SAC_db} );
 var bord = '1px solid #888';
 var ibord = '1px solid #CCC';
 var proj_title = "Saguaro Astronomy Club Interactive Database";
+var version = "version 8.1, March 22, 2010";
 var typing_timeout = 1250;
 
 /*
@@ -312,7 +314,7 @@ document.getElementById('object_type').onchange = onchange_function;
 
 document.getElementById("title").innerHTML = 
   document.getElementById("heading").innerHTML =
-  proj_title;
+  proj_title + ' - ' + version;
 
 
 /*
