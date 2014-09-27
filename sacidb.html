@@ -4,10 +4,31 @@
 
 <head>
   <style>
-  #control_panel {
-  border: 1px solid #888;
-  padding: 4px;
+
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.75;
   }
+
+  #control_panel {
+    border: 1px solid #888;
+    padding: 4px;
+  }
+
+  table {
+    line-height:normal;
+  }
+
+  strong {
+    font-size: 12pt;
+  }
+
+/*
+  * {
+  font-family: "AtlasTypewriterRegular", "Andale Mono", "Consolas", "Lucida Console", "Menlo", "Luxi Mono", monospace; 
+  }
+*/
   </style>
 
   <title id="title"></title>
@@ -27,7 +48,11 @@
     // set the entire page
     var e = document.getElementsByTagName("*");
     for ( var i = 0; i < e.length; i++ ) { 
-      e[i].setAttribute("style","background-color:"+bgcolor.c); 
+      /* this overwrites the entire "style" attribte in the element */
+      //e[i].setAttribute("style","background-color:"+bgcolor.c); 
+
+      /* this merely sets the one field _within_ the style attribute; what we want */
+      e[i].style.backgroundColor = bgcolor.c; 
     }
   }
   </script>
@@ -36,12 +61,16 @@
 
 
 <body>
-  <p style="margin:0;padding:0"><a href="javascript:toggle_color();">night mode</a> &nbsp;<span id="which_color"></span></p>
+
+  <p style="margin:0;padding:0;width:300px;float:left"><a href="javascript:toggle_color();">night mode</a> &nbsp;<span id="which_color"></span></p>
+  <p id="info" style="margin:0;padding:0;float:right;width:300px">For more information see: <a href="http://www.saguaroastro.org/" target="_blank">saguaroastro.org</a></p>
+<br>
+
   <script>
   toggle_color();
   </script>
+
   <h2 id="heading"></h2>
-  <p id="info" style="margin:0;padding:0">For more information see: <a href="http://www.saguaroastro.org/" target="_blank">saguaroastro.org</a></p>
   <div id="control_panel">
 
   <table> <tr><td>
@@ -131,7 +160,7 @@
   </div>
   <div id="query_summary"></div>
 
-  &nbsp;<br />&nbsp;
+  <br />
 
   <div id="report">&nbsp;</div>
   <div id="table_container"></div>
@@ -142,11 +171,22 @@
  * INITS
  */
 var db = queryable.open( {data:SAC_db} );
-var bord = '1px solid #888';
-var ibord = '1px solid #CCC';
 var proj_title = "Saguaro Astronomy Club Interactive Database";
 var version = "SAC DSO db, version 8.1, March 22, 2010";
-var typing_timeout = 1250;
+var typing_timeout_ms = 1250;
+
+var table_inline = 'border="0" cellpadding="0" cellspacing="0"';
+
+var bord = '1px solid #BBB';
+var ibord = '1px solid #CCC';
+var ctable_style_obj = {
+  'style': {
+    'table':{'border':bord},
+    'th':{'padding':'2px','border':'1px solid #999'},
+    'td':{'border-left':ibord,'border-top':ibord,'padding':'2px'}
+  },
+  'inline_header': table_inline
+};
 
 /*
  * FUNCS
@@ -301,7 +341,7 @@ function new_query()
   // build table out of it
   //
 
-  var table = new CTable({'style':{'table':{'border':bord},'td':{'border':ibord}}});
+  var table = new CTable( ctable_style_obj );
   var table_cont = document.getElementById("table_container");
   table.setParent( table_cont );
 
@@ -320,7 +360,7 @@ function new_query()
     { name: "mag", title: "Magnitude" },
     { name: "subr", title: "??" },
     { name: "urano", title: "Uranometria 2000.0 page number" },
-    { name: "ti", title: "Tirion SkyAtlas 2000.0 page number" },
+    { name: "ti", title: "Wil Tirion SkyAtlas 2000.0 chart number" },
     { name: "size_max", title: "Maximum Size in arcminutes" },
     { name: "size_min", title: "Minimum Size in arcminutes" },
     { name: "pa", title: "??" },
@@ -341,8 +381,13 @@ function new_query()
     table.add_row( vals );
   }
 
+  //
   table_cont.innerHTML = table.html();
-  document.getElementById("report").innerHTML = 'returned <strong>' + res.length + '</strong> results';
+
+  //
+  document.getElementById("report").innerHTML = '<strong>' + res.length + '</strong> results';
+
+  //
   build_report();
 }
 
@@ -423,7 +468,7 @@ search.onkeydown = function() {
     timer = null;
   }
 
-  timer = setTimeout( function(){ onchange_function(); }, typing_timeout );
+  timer = setTimeout( function(){ onchange_function(); }, typing_timeout_ms );
 };
 
 

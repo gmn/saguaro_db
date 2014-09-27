@@ -34,7 +34,9 @@ var ctable = (function(ctable){
         this.id = this.auto_id();
         this['class'] = null;
         this['parent'] = null;
-        this.direction = []; // true is descending
+        this.direction = [];
+        this.defaultInitialDirection = true;
+        this.inline_header = null;
 
         // for table wide definitions:
         // structure, can be any of: { "table":{},"th":{},"tr":{},"td":{} } 
@@ -96,22 +98,29 @@ var ctable = (function(ctable){
                 console.log( xtra );
         },
 
-        html: function( header ) {
+        _direction_init: function() {
             if ( this.direction.length === 0 ) { // late loading
-                var n = 0;
-                this.rows.forEach(function(row) {
-                    if ( row.length > n )
-                        n = row.length; // set as many directions as the longest row
-                });
+                var longest_cols = 0;
+                for ( var i = 0, l = this.rows.length; i < l; i++ ) {
+                    if ( this.rows[i].data.length > longest_cols )
+                        longest_cols = this.rows[i].data.length; // set as many directions as the longest row
+                }
                 var i = 0;
-                while ( i++ < n ) 
-                    this.direction.push(true);
+                while ( i++ < longest_cols ) 
+                    this.direction.push(this.defaultInitialDirection);
             }
+        },
+
+        html: function( inline_decl ) {
             var ts = this.getStyle( 'table' );
             var id = ' id="'+this.id+'"';
             var c = this['class'] ? ' class="'+this['class']+'"' : '';
+
             // allow explicitly set styles to trump Object styles
-            var s = header ? '<table'+id+c+ts+' ' + header + " >\n" : "<table"+id+c+ts+">\n" ;
+            if ( arguments.length === 0 && this.inline_header !== null )
+              inline_decl = this.inline_header;
+
+            var s = inline_decl ? '<table'+id+c+ts+' ' + inline_decl + " >\n" : "<table"+id+c+ts+">\n" ;
             s += this.innerHTML();
             return s + "</table>\n";
         },
@@ -153,7 +162,9 @@ var ctable = (function(ctable){
 
         sort_by: function( col, desc ) 
         {
-            var direction = desc ? -1 : 1;
+            this._direction_init();
+
+            var _direction = desc ? -1 : 1;
 
             this.rows.sort(function(a,b) 
             {
@@ -161,16 +172,18 @@ var ctable = (function(ctable){
                 var sorting = ( a.sort[col] && b.sort[col] ) ? 'sort' : 'data';
 
                 if ( typeof a[sorting][col] === "string" && typeof b[sorting][col] === "string" )
-                    return a[sorting][col].localeCompare(b[sorting][col]) * direction;
+                    return a[sorting][col].localeCompare(b[sorting][col]) * _direction;
                 else
-                    return a[sorting][col] > b[sorting][col] ? direction : -direction;
+                    return a[sorting][col] > b[sorting][col] ? _direction : -_direction;
             });
         },
 
-        loadJSON: function(j) {
+        loadJSON: function(j) 
+        {
             // structure. either are optional: { "table":[[]], "style":{}, "class":"" }
             //  OR
             // structure: { "table":{"th":[e,e,e],"tbody":[[a,b,c],[d,e,f]] }, "style":{}, "class":"" }
+
             if ( j && typeof j === 'string' ) 
                 j = JSON.parse(j);
             
@@ -195,6 +208,10 @@ var ctable = (function(ctable){
 
             if ( j && j['class'] ) {
                 this['class'] = j['class'];
+            }
+
+            if ( j && j.inline_header && typeof j.inline_header === 'string' ) {
+                this.inline_header = j.inline_header;
             }
         },
 
@@ -243,6 +260,7 @@ var ctable = (function(ctable){
         },
 
         toggleDirection: function ( c ) {   
+            this._direction_init();
             this.direction[c] = !this.direction[c];
             return this.direction[c];
         },

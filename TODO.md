@@ -1,6 +1,6 @@
 
 TODO:
-  X pre-load screen that says: "Please be patient. This project is approx 3.5 megabytes and will take a second to load. Once it has downloaded however, everything in the app takes places entirely in your browser's memory."
+  - localData section that stores user settings. User can click "Save Constraints in slot 1" button, and a drop-down appears that contains stored user constraints. Last slot viewed (if a slot), will always be the default settings shown on new pageload.
 
   - About link: popup, toggled
     "This is a very simple project that puts the query tools right in the browser, enabling the user to constrain the database however they may see fit. It is intended as a viewing aid, something that you can take outside and use along side a telescope and star chart. Uranometria page numbers are provided for all objects. 
@@ -59,5 +59,6 @@ Any questions, comments, suggestions for improvement can be sent uninhibitedly t
     * put in own frame, so that thread continues to work, while new table
       is being constructed
     * how to do overlay and tint the background (display GIF over table)
+  X pre-load screen that says: "Please be patient. This project is approx 3.5 megabytes and will take a second to load. Once it has downloaded however, everything in the app takes places entirely in your browser's memory."
 
 
